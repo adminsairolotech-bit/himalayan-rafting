@@ -1,0 +1,54 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write(*.js)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'JS file written - consider running prettier'"
+          }
+        ]
+      },
+      {
+        "matcher": "Write(*.css)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'CSS file written - check for unused classes'"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write(*.js)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Running quick syntax check...' && node --check $CLAUDE_FILE_PATHS 2>/dev/null || echo 'Syntax error in $CLAUDE_FILE_PATHS'"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit(*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'File edited: $CLAUDE_FILE_PATHS'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Session complete - consider running tests'"
+          }
+        ]
+      }
+    ]
+  }
+}
